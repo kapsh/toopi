@@ -17,13 +17,13 @@ def read(filename):
 setup(
     name='toopi',
     version='0.1',
-    url="https://github.com/kapsh/toopi",
+    url='https://github.com/kapsh/toopi',
     license='MIT',
 
     author='Alexander Kapshuna',
     author_email='kapsh@kap.sh',
 
-    description='client for pastebins inspired by wgetpaste',
+    description='Client for pastebins inspired by wgetpaste',
     long_description=read('README.rst'),
 
     packages=find_packages(exclude=('tests',)),
