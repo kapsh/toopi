@@ -18,7 +18,7 @@ See ``toopi -h`` for all available options.
 Installation
 ------------
 
-``pip install toopi[clip]``
+``pip install --user -U toopi[clip]``
 
 Requirements
 ^^^^^^^^^^^^
