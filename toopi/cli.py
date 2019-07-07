@@ -91,7 +91,7 @@ def main():
         else:
             title = title or 'stdin'
             text = sys.stdin.read()
-        result = engine.post(text, title, args.language, args.expiry)
+        result = engine.post(text, title, args.language, args.expiry)  # TODO expiry=engine.default
         url = result.raw_url if args.raw else result.nice_url
         if args.to_clipboard:
             utils.clipboard_copy(url)

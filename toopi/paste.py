@@ -42,6 +42,18 @@ class Pinnwand(PasteEngine):
             urljoin(self.domain, f'/raw/{paste_id}'))
 
 
+class DpasteCom(PasteEngine):
+    """dpaste.com engine (unnamed?)."""
+    def post(self, text, title, language, expiry) -> PasteResult:
+        with utils.strict_http_session() as session:
+            response = session.post(
+                urljoin(self.domain, '/api/v2/'),
+                data=dict(content=text, title=title, syntax=language, expiry_days=expiry))
+        return PasteResult(
+            response.headers['location'],
+            response.headers['location'] + '.txt')
+
+
 @dataclass
 class ServiceInfo:
     """Information about site."""
@@ -52,6 +64,7 @@ class ServiceInfo:
 SERVICES = {
     'local': ServiceInfo('http://localhost:8000/', Pinnwand),  # TODO move to config
     'bpaste': ServiceInfo('https://bpaste.net/', Pinnwand),
+    'dpaste': ServiceInfo('http://dpaste.com', DpasteCom),
 }
 
 DEFAULT_SERVICE = 'local'
