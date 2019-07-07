@@ -17,7 +17,7 @@ def read(filename):
 setup(
     name='toopi',
     version='0.1',
-    url="https://github.com/borntyping/cookiecutter-pypackage-minimal",
+    url="https://github.com/kapsh/toopi",
     license='MIT',
 
     author='Alexander Kapshuna',
@@ -27,6 +27,8 @@ setup(
     long_description=read('README.rst'),
 
     packages=find_packages(exclude=('tests',)),
+
+    python_requires='>="3.7"',
 
     install_requires=[
         'requests',
