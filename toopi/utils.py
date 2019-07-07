@@ -18,7 +18,7 @@ except ImportError:
 def strict_http_session() -> requests.Session:
     """Get new custom Session eager to raise errors."""
     session = requests.Session()
-    session.request = functools.partial(session.request, timeout=10)
+    session.request = functools.partial(session.request, timeout=30)  # TODO configurable
     session.hooks = {
         'response': lambda r, *a, **kw: r.raise_for_status(),
     }
