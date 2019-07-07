@@ -60,18 +60,7 @@ def main():
 
     engine = paste.paste_engine(args.service)
 
-    # instaexit options first
-    if args.version:
-        print_version()
-        exit()
-    if args.list_services:
-        list_services()
-        exit()
-    if args.list_languages:
-        list_languages(engine)
-        exit()
-    if args.list_expiries:
-        list_expiries(engine)
+    if query_options(args, engine):
         exit()
 
     command: str = args.command
@@ -98,11 +87,33 @@ def main():
         url = result.raw_url if args.raw else result.nice_url
         if args.to_clipboard:
             utils.clipboard_copy(url)
+
         print(url)
 
     except Exception as exc:  # pylint: disable=broad-except
         log.error(exc)
         exit(1)
+
+
+def query_options(args, engine):
+    """Process options meant only to query something.
+
+    :returns True if any option was triggered.
+    """
+    if args.version:
+        print_version()
+        return True
+    if args.list_services:
+        list_services()
+        return True
+    if args.list_languages:
+        list_languages(engine)
+        return True
+    if args.list_expiries:
+        list_expiries(engine)
+        return True
+
+    return False
 
 
 def print_version():
@@ -130,6 +141,7 @@ def list_languages(engine):
 
 
 def list_expiries(engine):
+    """List available expiration values."""
     if engine.expiries:
         print(engine.expiries)
     else:
