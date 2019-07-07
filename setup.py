@@ -34,7 +34,7 @@ setup(
         'requests',
     ],
 
-    extra_requires={
+    extras_require={
         'clip': ['pyperclip'],
     },
 
