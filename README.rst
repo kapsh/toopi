@@ -5,26 +5,35 @@ toopi
     :target: https://pypi.python.org/pypi/toopi
     :alt: Latest PyPI version
 
-.. image:: 0.png
-   :target: 0
-   :alt: Latest Travis CI build status
-
-An opinionated, minimal cookiecutter template for Python packages
+Client for pastebin services inspired by wgetpaste.
 
 Usage
 -----
 
+`toopi` can send files and read text from standard input or clipboard.
+
+See ``toopi -h`` for all available options.
+
+
 Installation
 ------------
+
+``pip install toopi[clip]``
 
 Requirements
 ^^^^^^^^^^^^
 
+Clipboard related functionality requires ``xclip`` installed (on Linux) or choosing ``[clip]`` extras.
+
 Compatibility
 -------------
 
+Python 3.7+
+
 Licence
 -------
+
+MIT
 
 Authors
 -------
