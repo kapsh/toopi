@@ -12,19 +12,25 @@ log = logging.getLogger(__name__)
 
 @dataclass
 class PasteResult:  # TODO enum?
+    """What can be returned after sending text."""
     nice_url: str
     raw_url: str
 
 
 class PasteEngine:
+    """How to work with pastebin engine."""
     def __init__(self, domain: str):
         self.domain = domain
 
     def post(self, text, title, language, expiry) -> PasteResult:
-        pass
+        """Send text to this pastebin."""
 
 
 class Pinnwand(PasteEngine):
+    """Pinnwand engine.
+
+    https://github.com/supakeen/pinnwand
+    """
     def post(self, text, title, language='text', expiry='1week') -> PasteResult:
         with utils.strict_http_session() as session:
             response = session.post(
@@ -38,6 +44,7 @@ class Pinnwand(PasteEngine):
 
 @dataclass
 class ServiceInfo:
+    """Information about site."""
     domain: str
     engine: Type[PasteEngine]
 
@@ -51,9 +58,11 @@ DEFAULT_SERVICE = 'local'
 
 
 def paste_engine(service_code: str) -> PasteEngine:
+    """Create paste engine by known code."""
     service = SERVICES[service_code]
     return service.engine(service.domain)
 
 
-def get_services() -> Dict[str, str]:
+def services_info() -> Dict[str, str]:
+    """Return name and url for known paste services."""
     return {name: service.domain for name, service in SERVICES.items()}

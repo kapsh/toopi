@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command line arguments."""
     parser = argparse.ArgumentParser(description=description)
 
     opts = parser.add_argument_group('Paste options')
@@ -54,6 +55,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main():
+    """Entry point."""
     args = parse_args()
     init_logging(args.verbose)
     log.debug(f'Arguments: {args}')
@@ -101,17 +103,20 @@ def main():
 
 
 def print_version():
+    """Print program name and version."""
     from . import __version__, __name__ as name  # TODO ??
     print(name, __version__)
 
 
 def init_logging(verbose=False):
+    """Set logging format to something more readable."""
     level = logging.DEBUG if verbose else logging.WARNING
     logging.basicConfig(level=level, format='[%(levelname)s] %(message)s')
 
 
 def list_services():
-    services = paste.get_services()
+    """Print known services."""
+    services = paste.services_info()
     width1 = max(map(len, services)) + 1
 
     print('name'.ljust(width1), 'url')
@@ -120,4 +125,5 @@ def list_services():
 
 
 def list_languages(engine):
-    log.error('TODO really list')
+    """Print languages supported by service."""
+    log.error(f'TODO cannot list languages for {engine}')
