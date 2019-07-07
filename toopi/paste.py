@@ -19,6 +19,9 @@ class PasteResult:  # TODO enum?
 
 class PasteEngine:
     """How to work with pastebin engine."""
+    default_expiry: str = None
+    expiries = None
+
     def __init__(self, domain: str):
         self.domain = domain
 
@@ -31,7 +34,10 @@ class Pinnwand(PasteEngine):
 
     https://github.com/supakeen/pinnwand
     """
-    def post(self, text, title, language='text', expiry='1week') -> PasteResult:
+    default_expiry = '1week'
+    expiries = ['1day', '1week']
+
+    def post(self, text, title, language, expiry) -> PasteResult:
         with utils.strict_http_session() as session:
             response = session.post(
                 urljoin(self.domain, '/json/new'),
@@ -44,6 +50,9 @@ class Pinnwand(PasteEngine):
 
 class DpasteCom(PasteEngine):
     """dpaste.com engine (unnamed?)."""
+    default_expiry = '7'
+    expiries = '[1 - 365]'
+
     def post(self, text, title, language, expiry) -> PasteResult:
         with utils.strict_http_session() as session:
             response = session.post(

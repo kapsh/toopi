@@ -19,9 +19,8 @@ def parse_args() -> argparse.Namespace:
                       help='Set service to use. Default: %(default)s', metavar='SERVICE')
     opts.add_argument('-l', dest='language', default='text',
                       help='Language (affects highlight). Default: %(default)s')
-    opts.add_argument('-e', dest='expiry', default='1week',
-                      help='Expiration period. Default: %(default)s')
-    opts.add_argument('-t', dest='title', default='', help='Set paste title when available')
+    opts.add_argument('-e', dest='expiry', help='Expiration period')
+    opts.add_argument('-t', dest='title', default='', help='Paste title (where available)')
 
     source = parser.add_argument_group(
         'Send text from', '(without any of these %(prog)s will read stdin)'
@@ -71,6 +70,9 @@ def main():
     if args.list_languages:
         list_languages(engine)
         exit()
+    if args.list_expiries:
+        list_expiries(engine)
+        exit()
 
     command: str = args.command
     file: Path = args.file
@@ -90,7 +92,9 @@ def main():
         else:
             title = title or 'stdin'
             text = sys.stdin.read()
-        result = engine.post(text, title, args.language, args.expiry)  # TODO expiry=engine.default
+
+        result = engine.post(
+            text, title, args.language, args.expiry or engine.default_expiry)
         url = result.raw_url if args.raw else result.nice_url
         if args.to_clipboard:
             utils.clipboard_copy(url)
@@ -123,3 +127,10 @@ def list_services():
 def list_languages(engine):
     """Print languages supported by service."""
     log.error(f'TODO cannot list languages for {engine}')
+
+
+def list_expiries(engine):
+    if engine.expiries:
+        print(engine.expiries)
+    else:
+        log.error('Cannot list expiries for this service')
