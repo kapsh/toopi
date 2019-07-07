@@ -4,6 +4,7 @@ import functools
 import logging
 import shutil
 import subprocess
+from typing import Generator, Iterable, List
 
 import requests
 
@@ -56,3 +57,30 @@ def command_with_output(command: str) -> str:
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     ).stdout
     return f'> {command}\n\n{output}'
+
+
+def tabulate(rows: List[Iterable[str]], *, gap=2, titles: List[str] = None
+             ) -> Generator[str, None, None]:
+    """Align fields from rows by width and add underlined header.
+
+    NB: works only when all items in rows and titles have same length.
+
+    :param rows: table data.
+    :param gap: space between columns.
+    :param titles: column names.
+    """
+    if titles:
+        header = [titles, ['‾' * len(field) for field in titles]]
+        data = header + rows
+    else:
+        data = rows
+    col_widths = [
+        max(map(len, column)) + gap
+        for column in zip(*data)
+    ]
+
+    for row in data:
+        yield ''.join(
+            field.ljust(width)
+            for field, width in zip(row, col_widths)
+        ).rstrip()

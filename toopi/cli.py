@@ -5,8 +5,7 @@ import logging
 import sys
 from pathlib import Path
 
-from . import __doc__ as description
-from . import paste, utils
+from . import __doc__ as description, paste, utils
 
 log = logging.getLogger(__name__)
 
@@ -116,12 +115,9 @@ def init_logging(verbose=False):
 
 def list_services():
     """Print known services."""
-    services = paste.services_info()
-    width1 = max(map(len, services)) + 1
-
-    print('name'.ljust(width1), 'url')
-    for name, url in sorted(services.items()):
-        print(name.ljust(width1), url)
+    info = list(sorted(paste.services_info().items()))
+    for row in utils.tabulate(info, titles=['name', 'url']):
+        print(row)
 
 
 def list_languages(engine):
