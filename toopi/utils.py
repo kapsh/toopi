@@ -63,7 +63,8 @@ def tabulate(rows: List[Iterable[str]], *, gap=2, titles: List[str] = None
              ) -> Generator[str, None, None]:
     """Align fields from rows by width and add underlined header.
 
-    NB: works only when all items in rows and titles have same length.
+    Works only when titles and all items in rows have same length,
+    throws ValueError otherwise.
 
     :param rows: table data.
     :param gap: space between columns.
@@ -74,6 +75,10 @@ def tabulate(rows: List[Iterable[str]], *, gap=2, titles: List[str] = None
         data = header + rows
     else:
         data = rows
+
+    if len(set(map(len, data))) != 1:
+        raise ValueError('Found rows with different length')
+
     col_widths = [
         max(map(len, column)) + gap
         for column in zip(*data)
