@@ -56,7 +56,7 @@ def command_with_output(command: str) -> str:
         command, shell=True, text=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     ).stdout
-    return f'> {command}\n\n{output}'
+    return f'# {command}\n\n{output}'
 
 
 def tabulate(rows: List[Iterable[str]], *, gap=2, titles: List[str] = None
