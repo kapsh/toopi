@@ -84,12 +84,11 @@ class ServiceInfo:
 
 
 SERVICES = {
-    "local": ServiceInfo("http://localhost:8000/", Pinnwand),  # TODO move to config
     "bpaste": ServiceInfo("https://bpaste.net/", Pinnwand),
     "dpaste": ServiceInfo("http://dpaste.com", DpasteCom),
 }
 
-DEFAULT_SERVICE = "local"
+DEFAULT_SERVICE = "bpaste"
 
 
 def paste_engine(service_code: str) -> PasteEngine:
