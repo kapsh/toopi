@@ -13,12 +13,14 @@ log = logging.getLogger(__name__)
 @dataclass
 class PasteResult:  # TODO enum?
     """What can be returned after sending text."""
+
     nice_url: str
     raw_url: str
 
 
 class PasteEngine:
     """How to work with pastebin engine."""
+
     default_expiry: str = None
     expiries = None
 
@@ -34,49 +36,60 @@ class Pinnwand(PasteEngine):
 
     https://github.com/supakeen/pinnwand
     """
-    default_expiry = '1week'
-    expiries = ['1day', '1week']
+
+    default_expiry = "1week"
+    expiries = ["1day", "1week"]
 
     def post(self, text, title, language, expiry) -> PasteResult:
         with utils.strict_http_session() as session:
             response = session.post(
-                urljoin(self.domain, '/json/new'),
-                data=dict(code=text, lexer=language, expiry=expiry))
-        paste_id = response.json()['paste_id']
+                urljoin(self.domain, "/json/new"),
+                data={"code": text, "lexer": language, "expiry": expiry},
+            )
+        paste_id = response.json()["paste_id"]
         return PasteResult(
-            urljoin(self.domain, f'/show/{paste_id}'),
-            urljoin(self.domain, f'/raw/{paste_id}'))
+            urljoin(self.domain, f"/show/{paste_id}"),
+            urljoin(self.domain, f"/raw/{paste_id}"),
+        )
 
 
 class DpasteCom(PasteEngine):
     """dpaste.com engine (unnamed?)."""
-    default_expiry = '7'
-    expiries = '[1 - 365]'
+
+    default_expiry = "7"
+    expiries = "[1 - 365]"
 
     def post(self, text, title, language, expiry) -> PasteResult:
         with utils.strict_http_session() as session:
             response = session.post(
-                urljoin(self.domain, '/api/v2/'),
-                data=dict(content=text, title=title, syntax=language, expiry_days=expiry))
+                urljoin(self.domain, "/api/v2/"),
+                data={
+                    "content": text,
+                    "title": title,
+                    "syntax": language,
+                    "expiry_days": expiry,
+                },
+            )
         return PasteResult(
-            response.headers['location'],
-            response.headers['location'] + '.txt')
+            response.headers["location"], response.headers["location"] + ".txt"
+        )
 
 
 @dataclass
 class ServiceInfo:
     """Information about site."""
+
     domain: str
     engine: Type[PasteEngine]
 
 
 SERVICES = {
-    'local': ServiceInfo('http://localhost:8000/', Pinnwand),  # TODO move to config
-    'bpaste': ServiceInfo('https://bpaste.net/', Pinnwand),
-    'dpaste': ServiceInfo('http://dpaste.com', DpasteCom),
+    "local": ServiceInfo("http://localhost:8000/", Pinnwand),  # TODO move to config
+    "bpaste": ServiceInfo("https://bpaste.net/", Pinnwand),
+    "dpaste": ServiceInfo("http://dpaste.com", DpasteCom),
 }
 
-DEFAULT_SERVICE = 'local'
+DEFAULT_SERVICE = "local"
 
 
 def paste_engine(service_code: str) -> PasteEngine:
