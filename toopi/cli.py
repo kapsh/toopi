@@ -5,7 +5,8 @@ import logging
 import sys
 from pathlib import Path
 
-from . import __doc__ as description, paste, utils
+from . import __doc__ as description
+from . import paste, utils
 
 log = logging.getLogger(__name__)
 

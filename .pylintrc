@@ -34,6 +34,8 @@ good-names=i, j, k, ex, Run, _,
 
 [MESSAGES CONTROL]
 
-disable = ,
+disable =
+    bad-continuation,
+    fixme,
     logging-fstring-interpolation,
     too-few-public-methods,
