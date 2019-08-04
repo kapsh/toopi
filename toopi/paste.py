@@ -56,8 +56,8 @@ class Pinnwand(PasteEngine):
 class DpasteCom(PasteEngine):
     """dpaste.com engine (unnamed?)."""
 
-    default_expiry = "7"
-    expiries = "[1 - 365]"
+    default_expiry = "30"
+    expiries = "[1..365] (in days)"
 
     def post(self, text, title, language, expiry) -> PasteResult:
         with utils.strict_http_session() as session:
